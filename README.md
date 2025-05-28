@@ -1,6 +1,7 @@
 ## ML with constraints 
 
-* link
+* gradient-based input optimization to satisfy model output constraints
+* 
 
 ## Links
 
