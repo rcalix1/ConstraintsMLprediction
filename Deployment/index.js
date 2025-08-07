@@ -23,13 +23,44 @@ async function runExample1() {
     const output = results.output1.data; // Float32Array
 
   
-    console.log("Output vector:", output);
-    alert("First value: " + output[0].toFixed(2));
+    //console.log("Output vector:", output);
+    //alert("First value: " + output[0].toFixed(2));
 
   } catch (e) {
     console.error("ONNX runtime error:", e);
     alert("Error: " + e.message);
   }
+
+ // PREDS DIV 
+  let predictions = document.getElementById('predictions1');
+  
+
+  predictions.innerHTML = `<hr> Got an output Tensor with values being: <br/> 
+ <table>
+ 
+  <tr>
+  <td> o_raceway_coal_burn_perce</td>
+  <td id="c2td0"> ${ output[0].toFixed(2)   } </td>
+  </tr>
+  
+  <tr>
+  <td> o_raceway_flame_temp_k </td>
+  <td id="c2td1"> ${output[1].toFixed(2)} </td>
+  </tr> 
+
+  <tr>
+  <td> o_raceway_volume_m </td>
+  <td id="c2td2"> ${output[2].toFixed(2)} </td>
+  </tr> 
+  
+
+ 
+ </table>   `;
+ 
+
+
+
+    
 }
 
 
