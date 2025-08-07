@@ -17,11 +17,8 @@ async function runExample1() {
   
    
   let session1 = new onnx.InferenceSession();
-  //await session1.loadModel("./resNet_Inverse_realData.onnx");
-
-  try { await session1.loadModel("./resNet_Inverse_realData.onnx"); }
-  catch (e) { console.error('loadModel failed', e); }
-
+  await session1.loadModel("./resNet_Inverse_realData.onnx");
+    
   let outputMap1 = await session1.run([tensorX]);
   let outputData1 = outputMap1.get('output1');
 
