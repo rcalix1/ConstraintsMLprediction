@@ -31,6 +31,8 @@ async function runExample1() {
     console.error("ONNX runtime error:", e);
     alert("Error: " + e.message);
   }
+
+    runAvg();
 }
 
 
@@ -68,6 +70,9 @@ async function runExample2() {
     console.error("ONNX runtime error:", e);
     alert("Error: " + e.message);
   }
+
+runAvg();
+    
 }
 
 
