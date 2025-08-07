@@ -22,16 +22,7 @@ async function runExample1() {
   let outputData1 = outputMap1.get('output1');
 
     
-  let session2 = new onnx.InferenceSession();
-  await session2.loadModel("./resNet_Inverse_realData.onnx");
-  let outputMap2 = await session2.run([tensorX]);
-  let outputData2 = outputMap2.get('output1');
-
-    
-  let session3 = new onnx.InferenceSession();
-  await session3.loadModel("./resNet_Inverse_realData.onnx");
-  let outputMap3 = await session3.run([tensorX]);
-  let outputData3 = outputMap3.get('output1');
+ 
  
 
   // PREDS DIV 
@@ -51,19 +42,18 @@ async function runExample1() {
   
   <tr>
   <td> o_raceway_flame_temp_k </td>
-  <td id="c1td1"> ${outputData2.data[0].toFixed(2)} </td>
+  <td id="c1td1"> 2 </td>
   </tr> 
 
   <tr>
   <td> o_raceway_volume_m </td>
-  <td id="c1td2"> ${outputData3.data[0].toFixed(2)} </td>
+  <td id="c1td2"> 5 </td>
   </tr> 
   
 
  </table>   `;
  
 
-//runDiff();
 
 }
 
@@ -134,7 +124,7 @@ async function runExample2() {
  </table>   `;
  
 
-//runDiff();
+
 
 }
 
