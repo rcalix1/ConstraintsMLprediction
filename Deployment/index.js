@@ -36,7 +36,10 @@ async function runExample1() {
 
   // PREDS DIV 
   let predictions = document.getElementById('predictions1');
-  
+
+
+ alert(outputData1.data[0]);
+
 
   predictions.innerHTML = `<hr> Got an output Tensor  with values being: <br/> 
  <table>
