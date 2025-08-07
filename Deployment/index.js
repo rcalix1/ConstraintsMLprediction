@@ -19,13 +19,13 @@ async function runExample1() {
     predictions.innerHTML = `
       <hr>Got an output Tensor:<br/>
       <table>
-        <tr><td>i_h2i_rate</td>   <td id="c1td0">${output[0].toFixed(2)}</td></tr>
-        <tr><td>i_h2_temp</td>    <td id="c1td1">${output[1].toFixed(2)}</td></tr>
-        <tr><td>i_ngi_rate</td>   <td id="c1td2">${output[2].toFixed(2)}</td></tr>
-        <tr><td>i_4</td>          <td id="c1td3">${output[3].toFixed(2)}</td></tr>
-        <tr><td>i_5</td>          <td id="c1td4">${output[4].toFixed(2)}</td></tr>
-        <tr><td>i_6</td>          <td id="c1td5">${output[5].toFixed(2)}</td></tr>
-        <tr><td>i_7</td>          <td id="c1td6">${output[6].toFixed(2)}</td></tr>
+        <tr><td>i_h2i_rate</td>          <td id="c1td0">${output[0].toFixed(2)}</td></tr>
+        <tr><td>i_h2_temp</td>           <td id="c1td1">${output[1].toFixed(2)}</td></tr>
+        <tr><td>i_ngi_rate</td>          <td id="c1td2">${output[2].toFixed(2)}</td></tr>
+        <tr><td>i_pci_rate</td>          <td id="c1td3">${output[3].toFixed(2)}</td></tr>
+        <tr><td>i_o2_volfract</td>       <td id="c1td4">${output[4].toFixed(2)}</td></tr>
+        <tr><td>i_hbtemp</td>            <td id="c1td5">${output[5].toFixed(2)}</td></tr>
+        <tr><td>i_wind_rt</td>           <td id="c1td6">${output[6].toFixed(2)}</td></tr>
       </table>`;
   } catch (e) {
     console.error("ONNX runtime error:", e);
