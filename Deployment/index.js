@@ -1,7 +1,42 @@
-
-
-
 async function runExample1() {
+
+    
+ 
+  const x = new Float32Array(4);
+    
+  x[0] = parseFloat(document.getElementById('box0c1').value) || 0;
+  x[1] = parseFloat(document.getElementById('box1c1').value) || 0;
+  x[2] = parseFloat(document.getElementById('box2c1').value) || 0;
+  x[3] = parseFloat(document.getElementById('box3c1').value) || 0;
+
+ 
+  const tensorX = new ort.Tensor('float32', x, [1, 4]);
+
+  try {
+  
+    const session = await ort.InferenceSession.create(
+      "./resNet_Inverse_realData_new.onnx?v=" + Date.now() // cache-bust
+    );
+
+ 
+    const results = await session.run({ input1: tensorX });
+    const output = results.output1.data; // Float32Array
+
+  
+    console.log("Output vector:", output);
+    alert("First value: " + output[0].toFixed(2));
+
+  } catch (e) {
+    console.error("ONNX runtime error:", e);
+    alert("Error: " + e.message);
+  }
+}
+
+
+
+
+
+async function runExample7() {
     
 
   var x = new Float32Array(1, 4);
