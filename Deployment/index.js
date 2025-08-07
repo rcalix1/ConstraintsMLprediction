@@ -39,18 +39,18 @@ async function runExample1() {
  <table>
  
   <tr>
-  <td> o_raceway_coal_burn_perce</td>
-  <td id="c2td0"> ${ output[0].toFixed(2)   } </td>
+  <td> i_h2i_rate</td>
+  <td id="c1td0"> ${ output[0].toFixed(2)   } </td>
   </tr>
   
   <tr>
-  <td> o_raceway_flame_temp_k </td>
-  <td id="c2td1"> ${output[1].toFixed(2)} </td>
+  <td> i_h2_temp </td>
+  <td id="c1td1"> ${output[1].toFixed(2)} </td>
   </tr> 
 
   <tr>
-  <td> o_raceway_volume_m </td>
-  <td id="c2td2"> ${output[2].toFixed(2)} </td>
+  <td> i_ngi_rate </td>
+  <td id="c1td2"> ${output[2].toFixed(2)} </td>
   </tr> 
   
 
