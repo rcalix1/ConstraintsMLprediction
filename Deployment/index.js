@@ -106,37 +106,37 @@ async function runAvg() {
  <table>
  
   <tr>
-  <td> o_raceway_coal_burn_perce </td>
+  <td> i_h2i_rate </td>
   <td> ${td0.toFixed(2)} </td>
   </tr>
   
   <tr>
-  <td>  o_raceway_flame_temp_k </td>
+  <td>  i_h2_temp </td>
   <td> ${td1.toFixed(2)} </td>
   </tr> 
   
   <tr>
-  <td> o_raceway_volume_m  </td>
+  <td> i_ngi_rate  </td>
   <td> ${td2.toFixed(2)} </td>
   </tr> 
 
    <tr>
-  <td> o_raceway_coal_burn_perce </td>
+  <td> i_pci_rate</td>
   <td> ${td3.toFixed(2)} </td>
   </tr>
   
   <tr>
-  <td>  o_raceway_flame_temp_k </td>
+  <td>  i_o2_volfract </td>
   <td> ${td4.toFixed(2)} </td>
   </tr> 
   
   <tr>
-  <td> o_raceway_volume_m  </td>
+  <td> i_hbtemp  </td>
   <td> ${td5.toFixed(2)} </td>
   </tr> 
 
    <tr>
-  <td> o_raceway_volume_m  </td>
+  <td> i_wind_rt </td>
   <td> ${td6.toFixed(2)} </td>
   </tr> 
  
