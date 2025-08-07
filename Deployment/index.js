@@ -29,29 +29,11 @@ async function runExample1() {
   let predictions = document.getElementById('predictions1');
 
 
- alert(outputData1.data[0]);
+ alert("hello");
 
 
   predictions.innerHTML = `<hr> Got an output Tensor  with values being: <br/> 
- <table>
- 
-  <tr>
-  <td> o_raceway_coal_burn_perce</td>
-  <td id="c1td0"> ${outputData1.data[0].toFixed(2)} </td>
-  </tr>
-  
-  <tr>
-  <td> o_raceway_flame_temp_k </td>
-  <td id="c1td1"> 2 </td>
-  </tr> 
-
-  <tr>
-  <td> o_raceway_volume_m </td>
-  <td id="c1td2"> 5 </td>
-  </tr> 
-  
-
- </table>   `;
+here   `;
  
 
 
