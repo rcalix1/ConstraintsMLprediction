@@ -6,6 +6,6 @@
 
 * https://rcalix1.github.io/ConstraintsMLprediction/Deployment/index.html
 
-## Inverse Model (Synthetic data, resNet, 4x7) - CFD 1000 Samples - Constraints inpur gradients
+## Inverse Model (Synthetic data, resNet, 4x7) - CFD 1000 Samples - Constraints gradients
 
 * 
