@@ -73,24 +73,36 @@ async function runExample2() {
 
 
 
-async function runDiff() {
+async function runAvg() {
     
     var c1td0 = parseFloat( document.getElementById('c1td0').innerHTML );
     var c1td1 = parseFloat( document.getElementById('c1td1').innerHTML );
     var c1td2 = parseFloat( document.getElementById('c1td2').innerHTML );
+    var c1td3 = parseFloat( document.getElementById('c1td3').innerHTML );
+    var c1td4 = parseFloat( document.getElementById('c1td4').innerHTML );
+    var c1td5 = parseFloat( document.getElementById('c1td5').innerHTML );
+    var c1td6 = parseFloat( document.getElementById('c1td6').innerHTML );
   
     
     var c2td0 = parseFloat( document.getElementById('c2td0').innerHTML );
     var c2td1 = parseFloat( document.getElementById('c2td1').innerHTML );
     var c2td2 = parseFloat( document.getElementById('c2td2').innerHTML );
+    var c2td3 = parseFloat( document.getElementById('c2td3').innerHTML );
+    var c2td4 = parseFloat( document.getElementById('c2td4').innerHTML );
+    var c2td5 = parseFloat( document.getElementById('c2td5').innerHTML );
+    var c2td6 = parseFloat( document.getElementById('c2td6').innerHTML );
 
     
-    td0 = c1td0 - c2td0;
-    td1 = c1td1 - c2td1;
-    td2 = c1td2 - c2td2;
-  
+    td0 = (c1td0 + c2td0)/2;
+    td1 = (c1td1 + c2td1)/2;
+    td2 = (c1td2 + c2td2)/2;
+    td3 = (c1td3 + c2td3)/2;
+    td4 = (c1td4 + c2td4)/2;
+    td5 = (c1td5 + c2td5)/2;
+    td6 = (c1td6 + c2td6)/2;
+
  
-     difference.innerHTML = `<hr> Difference is: <br/> 
+     difference.innerHTML = `<hr> Average is: <br/> 
  <table>
  
   <tr>
@@ -106,6 +118,26 @@ async function runDiff() {
   <tr>
   <td> o_raceway_volume_m  </td>
   <td> ${td2.toFixed(2)} </td>
+  </tr> 
+
+   <tr>
+  <td> o_raceway_coal_burn_perce </td>
+  <td> ${td3.toFixed(2)} </td>
+  </tr>
+  
+  <tr>
+  <td>  o_raceway_flame_temp_k </td>
+  <td> ${td4.toFixed(2)} </td>
+  </tr> 
+  
+  <tr>
+  <td> o_raceway_volume_m  </td>
+  <td> ${td5.toFixed(2)} </td>
+  </tr> 
+
+   <tr>
+  <td> o_raceway_volume_m  </td>
+  <td> ${td6.toFixed(2)} </td>
   </tr> 
  
  </table>   `;
