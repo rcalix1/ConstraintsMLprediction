@@ -82,20 +82,23 @@ runAvg();
 
 async function runExampleSynthetic() {
     
-  const x = new Float32Array(6);
+  const x = new Float32Array(8);
   x[0] = parseFloat(document.getElementById('box0c1').value) || 0;
   x[1] = parseFloat(document.getElementById('box1c1').value) || 0;
   x[2] = parseFloat(document.getElementById('box2c1').value) || 0;
-  x[3] = parseFloat(document.getElementById('box0c2').value) || 0;
-  x[4] = parseFloat(document.getElementById('box1c2').value) || 0;
-  x[5] = parseFloat(document.getElementById('box2c2').value) || 0;
+  x[3] = parseFloat(document.getElementById('box3c1').value) || 0;
+    
+  x[4] = parseFloat(document.getElementById('box0c2').value) || 0;
+  x[5] = parseFloat(document.getElementById('box1c2').value) || 0;
+  x[6] = parseFloat(document.getElementById('box2c2').value) || 0;
+  x[7] = parseFloat(document.getElementById('box3c2').value) || 0;
 
-  const tensorX = new ort.Tensor('float32', x, [1, 6]);
+  const tensorX = new ort.Tensor('float32', x, [1, 8]);
 
   try {
     const session = await ort.InferenceSession.create("./resNet_Inverse_syntheticData.onnx?v=" + Date.now());
     const results = await session.run({ input1: tensorX });
-    const output = results.output1.data; // Float32Array length 6
+    const output = results.output1.data; // Float32Array length 8
 
     // render here (output is in scope)
     const predictions = document.getElementById('predSynthetic');
