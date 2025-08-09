@@ -78,6 +78,52 @@ runAvg();
 
 
 
+
+
+async function runExampleSynthetic() {
+    
+  const x = new Float32Array(6);
+  x[0] = parseFloat(document.getElementById('box0c1').value) || 0;
+  x[1] = parseFloat(document.getElementById('box1c1').value) || 0;
+  x[2] = parseFloat(document.getElementById('box2c1').value) || 0;
+  x[3] = parseFloat(document.getElementById('box0c2').value) || 0;
+  x[4] = parseFloat(document.getElementById('box1c2').value) || 0;
+  x[5] = parseFloat(document.getElementById('box2c2').value) || 0;
+
+  const tensorX = new ort.Tensor('float32', x, [1, 6]);
+
+  try {
+    const session = await ort.InferenceSession.create("./resNet_Inverse_syntheticData.onnx?v=" + Date.now());
+    const results = await session.run({ input1: tensorX });
+    const output = results.output1.data; // Float32Array length 6
+
+    // render here (output is in scope)
+    const predictions = document.getElementById('predSynthetic');
+    predictions.innerHTML = `
+      <hr>Got an output Tensor:<br/>
+      <table>
+        <tr><td>i_h2i_rate</td>          <td id="syntd0">${output[0].toFixed(2)}</td></tr>
+        <tr><td>i_h2_temp</td>           <td id="syntd1">${output[1].toFixed(2)}</td></tr>
+        <tr><td>i_ngi_rate</td>          <td id="syntd2">${output[2].toFixed(2)}</td></tr>
+        <tr><td>i_pci_rate</td>          <td id="syntd3">${output[3].toFixed(2)}</td></tr>
+        <tr><td>i_o2_volfract</td>       <td id="syntd4">${output[4].toFixed(2)}</td></tr>
+        <tr><td>i_hbtemp</td>            <td id="syntd5">${output[5].toFixed(2)}</td></tr>
+        <tr><td>i_wind_rt</td>           <td id="syntd6">${output[6].toFixed(2)}</td></tr>
+      </table>`;
+  } catch (e) {
+    console.error("ONNX runtime error:", e);
+    alert("Error: " + e.message);
+  }
+
+runAvg();
+    
+}
+
+
+
+
+
+
 async function runAvg() {
     
     var c1td0 = parseFloat( document.getElementById('c1td0').innerHTML );
