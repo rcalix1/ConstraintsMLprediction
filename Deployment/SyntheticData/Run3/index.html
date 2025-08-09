@@ -1,0 +1,108 @@
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
+  <script src="index.js"></script>
+
+  <style>
+    table, th, td { border: 1px solid; }
+
+    /* Top row boxes (keep your originals) */
+    #leftbox { float:left; width:35%; height:300px; }
+    #middlebox{ float:left; width:25%; height:300px; }
+    #rightbox{ float:left; width:25%; height:300px; }
+
+    /* Make top Synthetic button box align + match style */
+    #syntheticButton{
+      float:left;
+      width:25%;
+      height:300px;
+      box-sizing:border-box;
+      border:1px solid red;     /* match bottom synthetic */
+      padding:10px;             /* optional spacing */
+    }
+
+    /* Original bottom synthetic (kept but overridden below) */
+    #syntheticbox{
+      float:right;
+      width:33%;
+      height:300px;
+      border:red;               /* invalid, fixed below */
+    }
+
+    h1{ color:green; text-align:center; }
+
+    /* ---- Clearfixes for rows ---- */
+    #boxes1:after { content:""; display:block; clear:both; }  /* <-- added */
+    #boxes2:after { content:""; display:block; clear:both; }
+
+    /* ---- Bottom row: force all four on one line, same size ---- */
+    #boxes2 #leftbox,
+    #boxes2 #middlebox,
+    #boxes2 #rightbox,
+    #boxes2 #syntheticbox {
+      float:left;
+      width:25%;                /* 4 × 25% = one row */
+      height:300px;
+      box-sizing:border-box;
+    }
+
+    /* Fix bottom synthetic border + align color scheme */
+    #syntheticbox { border:1px solid red; padding:10px; }
+
+    /* Top row: force a 4-column grid and push Synthetic to column 4 */
+    #boxes1 #leftbox { width:25%; }
+    #boxes1 #middlebox { width:25%; }
+    #boxes1 #syntheticButton { width:25%; margin-left:25%; } /* sits in the 4th 25% slot */
+  </style>
+</head>
+<body>
+  <h1>Inverse Model (resNet, 4x7) - CFD real data ~ 1000 Samples</h1>
+
+  <div id="boxes1">
+    <div id="leftbox">
+      <h2>From</h2>
+      <input type="text" id="box0c1" value="1800">Raceway flame temp <br/>
+      <input type="text" id="box1c1" value="1700"> Hot metal temp <br/>
+      <input type="text" id="box2c1" value="70"> Top gas temp <br/>
+      <input type="text" id="box3c1" value="20"> production rate <br/>
+      <div><input style="background-color:yellow" type="button" value="Run" onclick="runExample1()"/></div>
+    </div>
+
+    <div id="middlebox">
+      <h2>To</h2>
+      <input type="text" id="box0c2" value="2200"> Raceway flame temp<br/>
+      <input type="text" id="box1c2" value="1800"> Hot metal temp <br/>
+      <input type="text" id="box2c2" value="120">  Top gas temp <br/>
+      <input type="text" id="box3c2" value="40"> production rate <br/>
+      <div><input style="background-color:yellow" type="button" value="Run" onclick="runExample2()"/></div>
+    </div>
+
+    <div id="syntheticButton">
+      <h2>Synthetic</h2>
+      <div><input style="background-color:yellow" type="button" value="Run" onclick="runExampleSynthetic()"/></div>
+    </div>
+  </div>
+
+  <div id="boxes2">
+    <div id="leftbox">
+      <h2>From Inference</h2>
+      <div id="predictions1"></div>
+    </div>
+
+    <div id="middlebox">
+      <h2>To Inference</h2>
+      <div id="predictions2"></div>
+    </div>
+
+    <div id="rightbox">
+      <h2>Average</h2>
+      <div id="difference"></div>
+    </div>
+
+    <div id="syntheticbox">
+      <h2>Synthetic</h2>
+      <div id="predSynthetic"></div>
+    </div>
+  </div>
+</body>
+</html>
