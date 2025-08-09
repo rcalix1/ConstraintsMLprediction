@@ -36,7 +36,22 @@
                 color:green;
                 text-align:center;
         }
-     
+     /* Keep all four bottom boxes on one line */
+#boxes2:after { content: ""; display: block; clear: both; }
+
+#boxes2 #leftbox,
+#boxes2 #middlebox,
+#boxes2 #rightbox,
+#boxes2 #syntheticbox {
+  float: left;
+  width: 25%;           /* 25% x 4 = 100% */
+  height: 300px;
+  box-sizing: border-box;
+}
+
+/* Fix invalid border on synthetic box */
+#syntheticbox { border: 1px solid red; }
+
      
       
   </style>
