@@ -46,6 +46,18 @@
       box-sizing:border-box;
     }
 
+
+      /* ---- Bottom row: force all four on one line, same size ---- */
+    #boxes3 #leftboxHW,
+    #boxes3 #middleboxHW,
+    #boxes3 #rightboxHW,
+    #boxes3 #syntheticboxHW {
+      float:left;
+      width:25%;                /* 4 × 25% = one row */
+      height:300px;
+      box-sizing:border-box;
+    }
+
     /* Fix bottom synthetic border + align color scheme */
     #syntheticbox { border:1px solid red; padding:10px; }
 
@@ -121,10 +133,36 @@
       <h2>Synthetic</h2>
       <div id="predSynthetic"></div>   
 
-      <h2>Real Gen</h2>
-      <div id="predRealGenHong"></div>
+     
 
     </div>
   </div>
+
+    <div id="boxes3">
+    <div id="leftboxHW">
+      <h2>From Inference</h2>
+      <div id="predictionsHW1"></div>
+    </div>
+
+    <div id="middleboxHW">
+      <h2>To Inference</h2>
+      <div id="predictionsHW2"></div>
+    </div>
+
+    <div id="rightboxHW">
+      <h2>Average</h2>
+      <div id="differenceHW"></div>
+    </div>
+
+    <div id="syntheticboxHW">
+      <h2>Synthetic</h2>
+      <div id="predSyntheticHW"></div>   
+
+
+    </div>
+  </div>
+
+
+  
 </body>
 </html>
