@@ -285,22 +285,22 @@ runAvgHW();
 
 async function runAvgHW() {
     
-    var c1td0 = parseFloat( document.getElementById('c1td0').innerHTML );
-    var c1td1 = parseFloat( document.getElementById('c1td1').innerHTML );
-    var c1td2 = parseFloat( document.getElementById('c1td2').innerHTML );
-    var c1td3 = parseFloat( document.getElementById('c1td3').innerHTML );
-    var c1td4 = parseFloat( document.getElementById('c1td4').innerHTML );
-    var c1td5 = parseFloat( document.getElementById('c1td5').innerHTML );
-    var c1td6 = parseFloat( document.getElementById('c1td6').innerHTML );
+    var c1td0 = parseFloat( document.getElementById('c1td0HW').innerHTML );
+    var c1td1 = parseFloat( document.getElementById('c1td1HW').innerHTML );
+    var c1td2 = parseFloat( document.getElementById('c1td2HW').innerHTML );
+    var c1td3 = parseFloat( document.getElementById('c1td3HW').innerHTML );
+    var c1td4 = parseFloat( document.getElementById('c1td4HW').innerHTML );
+    var c1td5 = parseFloat( document.getElementById('c1td5HW').innerHTML );
+    var c1td6 = parseFloat( document.getElementById('c1td6HW').innerHTML );
   
     
-    var c2td0 = parseFloat( document.getElementById('c2td0').innerHTML );
-    var c2td1 = parseFloat( document.getElementById('c2td1').innerHTML );
-    var c2td2 = parseFloat( document.getElementById('c2td2').innerHTML );
-    var c2td3 = parseFloat( document.getElementById('c2td3').innerHTML );
-    var c2td4 = parseFloat( document.getElementById('c2td4').innerHTML );
-    var c2td5 = parseFloat( document.getElementById('c2td5').innerHTML );
-    var c2td6 = parseFloat( document.getElementById('c2td6').innerHTML );
+    var c2td0 = parseFloat( document.getElementById('c2td0HW').innerHTML );
+    var c2td1 = parseFloat( document.getElementById('c2td1HW').innerHTML );
+    var c2td2 = parseFloat( document.getElementById('c2td2HW').innerHTML );
+    var c2td3 = parseFloat( document.getElementById('c2td3HW').innerHTML );
+    var c2td4 = parseFloat( document.getElementById('c2td4HW').innerHTML );
+    var c2td5 = parseFloat( document.getElementById('c2td5HW').innerHTML );
+    var c2td6 = parseFloat( document.getElementById('c2td6HW').innerHTML );
 
     
     td0 = (c1td0 + c2td0)/2;
@@ -312,7 +312,7 @@ async function runAvgHW() {
     td6 = (c1td6 + c2td6)/2;
 
  
-     difference.innerHTML = `<hr> Average is: <br/> 
+     differenceHW.innerHTML = `<hr> Average is: <br/> 
  <table>
  
   <tr>
