@@ -124,7 +124,7 @@ runAvg();
 
 
 
-async function runExampleRealGenHong1() {
+async function runExampleRealGenHong() {
 
     runExampleHW1(); 
     runExampleHW2();
