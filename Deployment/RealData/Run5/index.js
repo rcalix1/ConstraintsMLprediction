@@ -124,11 +124,12 @@ runAvg();
 
 
 
-async function runExampleRealGenHong() {
 
-    runExampleHW1(); 
-    runExampleHW2();
-    runAvgHW();
+
+async function runExampleRealGenHong() {
+    await runExampleHW1(); 
+    await runExampleHW2();
+    runAvgHW();  
 }
 
 
