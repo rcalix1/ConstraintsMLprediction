@@ -37,6 +37,81 @@ async function runExample1() {
 
 
 
+async function runExampleLEforward() {
+    
+  const x = new Float32Array(7);
+  x[0] = parseFloat(document.getElementById('LEbox0c1').value) || 0;
+  x[1] = parseFloat(document.getElementById('LEbox1c1').value) || 0;
+  x[2] = parseFloat(document.getElementById('LEbox2c1').value) || 0;
+  x[3] = parseFloat(document.getElementById('LEbox3c1').value) || 0;
+  x[4] = parseFloat(document.getElementById('LEbox4c1').value) || 0;
+  x[5] = parseFloat(document.getElementById('LEbox5c1').value) || 0;
+  x[6] = parseFloat(document.getElementById('LEbox6c1').value) || 0;  
+
+  const tensorX = new ort.Tensor('float32', x, [1, 7]);
+
+  try {
+    const session = await ort.InferenceSession.create("./LEPINE_model_Forward.onnx?v=" + Date.now());
+    const results = await session.run({ input1: tensorX });
+    const output = results.output1.data; // Float32Array length 4
+
+    // render here (output is in scope)
+    const predictions = document.getElementById('predictionsLEforward');
+    predictions.innerHTML = `
+      <hr>Got an output Tensor:<br/>
+      <table>
+        <tr><td>i_h2i_rate</td>          <td id="c1td0">${output[0].toFixed(2)}</td></tr>
+        <tr><td>i_h2_temp</td>           <td id="c1td1">${output[1].toFixed(2)}</td></tr>
+        <tr><td>i_ngi_rate</td>          <td id="c1td2">${output[2].toFixed(2)}</td></tr>
+        <tr><td>i_pci_rate</td>          <td id="c1td3">${output[3].toFixed(2)}</td></tr>
+      </table>`;
+  } catch (e) {
+    console.error("ONNX runtime error:", e);
+    alert("Error: " + e.message);
+  }
+
+    
+}
+
+
+
+async function runExampleLEinverse() {
+    
+  const x = new Float32Array(4);
+  x[0] = parseFloat(document.getElementById('LEbox0c2').value) || 0;
+  x[1] = parseFloat(document.getElementById('LEbox1c2').value) || 0;
+  x[2] = parseFloat(document.getElementById('LEbox2c2').value) || 0;
+  x[3] = parseFloat(document.getElementById('LEbox3c2').value) || 0;
+   
+  const tensorX = new ort.Tensor('float32', x, [1, 4]);
+
+  try {
+    const session = await ort.InferenceSession.create("./LEPINE_model_Inverse_2.onnx?v=" + Date.now());
+    const results = await session.run({ input1: tensorX });
+    const output = results.output1.data; // Float32Array length 7
+
+    // render here (output is in scope)
+    const predictions = document.getElementById('predictionsLEinverse');
+    predictions.innerHTML = `
+      <hr>Got an output Tensor:<br/>
+      <table>
+        <tr><td>i_h2i_rate</td>          <td id="c1td0">${output[0].toFixed(2)}</td></tr>
+        <tr><td>i_h2_temp</td>           <td id="c1td1">${output[1].toFixed(2)}</td></tr>
+        <tr><td>i_ngi_rate</td>          <td id="c1td2">${output[2].toFixed(2)}</td></tr>
+        <tr><td>i_pci_rate</td>          <td id="c1td3">${output[3].toFixed(2)}</td></tr>
+        <tr><td>i_h2_temp</td>           <td id="c1td1">${output[4].toFixed(2)}</td></tr>
+        <tr><td>i_ngi_rate</td>          <td id="c1td2">${output[5].toFixed(2)}</td></tr>
+        <tr><td>i_pci_rate</td>          <td id="c1td3">${output[6].toFixed(2)}</td></tr>
+      </table>`;
+  } catch (e) {
+    console.error("ONNX runtime error:", e);
+    alert("Error: " + e.message);
+  }
+
+    
+}
+
+
 
 async function runExample2() {
     
