@@ -60,10 +60,10 @@ async function runExampleLEforward() {
     predictions.innerHTML = `
       <hr>Got an output Tensor:<br/>
       <table>
-        <tr><td>i_h2i_rate</td>          <td id="c1td0">${output[0].toFixed(2)}</td></tr>
-        <tr><td>i_h2_temp</td>           <td id="c1td1">${output[1].toFixed(2)}</td></tr>
-        <tr><td>i_ngi_rate</td>          <td id="c1td2">${output[2].toFixed(2)}</td></tr>
-        <tr><td>i_pci_rate</td>          <td id="c1td3">${output[3].toFixed(2)}</td></tr>
+        <tr><td>race flame temp</td>          <td id="c1td0">${output[0].toFixed(2)}</td></tr>
+        <tr><td>hot metal temp</td>           <td id="c1td1">${output[1].toFixed(2)}</td></tr>
+        <tr><td>top gas temp</td>          <td id="c1td2">${output[2].toFixed(2)}</td></tr>
+        <tr><td>prod rate</td>          <td id="c1td3">${output[3].toFixed(2)}</td></tr>
       </table>`;
   } catch (e) {
     console.error("ONNX runtime error:", e);
@@ -99,9 +99,9 @@ async function runExampleLEinverse() {
         <tr><td>i_h2_temp</td>           <td id="c1td1">${output[1].toFixed(2)}</td></tr>
         <tr><td>i_ngi_rate</td>          <td id="c1td2">${output[2].toFixed(2)}</td></tr>
         <tr><td>i_pci_rate</td>          <td id="c1td3">${output[3].toFixed(2)}</td></tr>
-        <tr><td>i_h2_temp</td>           <td id="c1td1">${output[4].toFixed(2)}</td></tr>
-        <tr><td>i_ngi_rate</td>          <td id="c1td2">${output[5].toFixed(2)}</td></tr>
-        <tr><td>i_pci_rate</td>          <td id="c1td3">${output[6].toFixed(2)}</td></tr>
+        <tr><td>o2 volf</td>           <td id="c1td1">${output[4].toFixed(2)}</td></tr>
+        <tr><td> hb temp </td>          <td id="c1td2">${output[5].toFixed(2)}</td></tr>
+        <tr><td> wind rate</td>          <td id="c1td3">${output[6].toFixed(2)}</td></tr>
       </table>`;
   } catch (e) {
     console.error("ONNX runtime error:", e);
