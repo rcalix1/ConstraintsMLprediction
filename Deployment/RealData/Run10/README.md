@@ -14,8 +14,7 @@
 
 We are given:
 
-* **Forward model**: ( x \in \mathbb{R}^7 \rightarrow y \in \mathbb{R}^4 )
-* **Inverse model**: ( y \in \mathbb{R}^4 \rightarrow x \in \mathbb{R}^7 )
+
 
 - **Forward model**: `x ∈ ℝ⁷ → y ∈ ℝ⁴`
 - **Inverse model**: `y ∈ ℝ⁴ → x ∈ ℝ⁷`
