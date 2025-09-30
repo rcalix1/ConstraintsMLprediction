@@ -48,9 +48,7 @@ This is where the **Jacobian matrix** becomes essential.
 
 The **Jacobian** is the matrix of partial derivatives of ( y = f(x) ):
 
-[
-J(x) = \frac{dy}{dx} \in \mathbb{R}^{4 \times 7}
-]
+
 
 
 `J(x) = dy/dx ∈ ℝ⁴ˣ⁷`
