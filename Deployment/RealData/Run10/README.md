@@ -30,7 +30,7 @@ Now the goal is to **analyze whether the forward model is invertible**.
 
 A function ( f(x) ) is **invertible** if every output ( y = f(x) ) has a **unique** input ( x ).
 
-Since exact invertibility is rare in neural networks, we ask:
+Since exact invertibility is rare in neural networks, we can ask:
 
 > **Is the mapping *locally invertible* at least?**
 > (Do small changes in ( y ) correspond to small, unique changes in ( x )?)
@@ -94,7 +94,7 @@ print("Local Jacobian rank:", rank.item())
 
 ---
 
-## ✅ What to Do
+## ✅ Steps to the Process
 
 Run this analysis across many points in your dataset:
 
@@ -112,7 +112,7 @@ Run this analysis across many points in your dataset:
 
 ---
 
-## 🧠 Optional Deep Dives
+## 🧠 Additional
 
 ### ✅ Condition Number
 
@@ -135,4 +135,4 @@ Plot rank or condition number against different inputs to identify fragile zones
 * ✔ If rank = 4 → locally invertible
 * ❌ If rank < 4 → not invertible in that region
 
-This gives you a principled, mathematical way to assess whether your neural network's forward function can support a meaningful inverse mapping.
+This provides a way to assess whether a neural network's forward function can support a useful inverse mapping.
