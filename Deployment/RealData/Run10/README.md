@@ -74,9 +74,10 @@ print(J.shape)  # Should be [1, 4, 7]
 
 From first-order Taylor expansion:
 
-[
-\Delta y \approx A \cdot \Delta x \quad \text{where } A = J(x)
-]
+
+
+`Δy ≈ A · Δx` where `A = J(x)`
+
 
 This approximates the model locally as a linear system.
 
