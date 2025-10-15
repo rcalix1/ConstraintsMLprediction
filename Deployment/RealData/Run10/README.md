@@ -23,7 +23,9 @@ We are given:
 We have already:
 
 * Trained a forward and inverse neural network model
-* Enforced a consistency loss: ( F(I(y)) \approx y )
+* Enforced a consistency loss:
+
+  `F(I(y)) \approx y `
 
 Now the goal is to **analyze whether the forward model is invertible**.
 
