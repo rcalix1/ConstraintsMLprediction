@@ -187,7 +187,7 @@ J = jacobian(wrapped_model, x_point)  # shape: [output_dim, input_dim]
   
 $$ J_{ij} = \frac{\partial \text{output}_i}{\partial \text{input}_j} $$
 
-$$ J = min \sum \limits_{i} ^{n} ( g(x) - I(x) )^2 $$
+
   
 * If output = 4 and input = 7, then `J` has shape `[4, 7]`.
 
@@ -196,9 +196,9 @@ u, s, v = torch.svd(J)
 ```
 
 * Performs **Singular Value Decomposition**:
-  [
-  J = U \cdot \text{diag}(s) \cdot V^T
-  ]
+  
+  $$ J = U \cdot \text{diag}(s) \cdot V^T $$
+  
 * `s` contains the singular values, which tell you how much the input space is stretched or squashed.
 
 ```python
@@ -216,9 +216,9 @@ else:
 ```
 
 * Computes the **condition number**:
-  [
-  \kappa(J) = \frac{\sigma_{\text{max}}}{\sigma_{\text{min}}}
-  ]
+  
+  $$  \kappa(J) = \frac{\sigma_{\text{max}}}{\sigma_{\text{min}}} $$
+  
 * A high condition number (e.g., > 10,000) means the system is **ill-conditioned** and nearly non-invertible.
 * If the smallest singular value is close to zero, it sets the condition number to `inf`.
 
