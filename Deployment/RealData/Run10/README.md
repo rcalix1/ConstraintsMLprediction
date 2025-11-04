@@ -184,9 +184,10 @@ J = jacobian(wrapped_model, x_point)  # shape: [output_dim, input_dim]
 ```
 
 * Computes the **Jacobian matrix**:
-  [
+$$
   J_{ij} = \frac{\partial \text{output}_i}{\partial \text{input}_j}
-  ]
+$$
+  
 * If output = 4 and input = 7, then `J` has shape `[4, 7]`.
 
 ```python
