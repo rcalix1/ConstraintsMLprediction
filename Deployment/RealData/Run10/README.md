@@ -184,9 +184,10 @@ J = jacobian(wrapped_model, x_point)  # shape: [output_dim, input_dim]
 ```
 
 * Computes the **Jacobian matrix**:
-$$ J_{ij} = \frac{\partial \text{output}_i}{\partial \text{input}_j}   $$
+  
+$$ J_{ij} = \frac{\partial \text{output}_i}{\partial \text{input}_j} $$
 
-$$   J = min \sum \limits _{i} ^{n} ( g(x) - I(x) )^2 $$
+$$ J = min \sum \limits_{i} ^{n} ( g(x) - I(x) )^2 $$
   
 * If output = 4 and input = 7, then `J` has shape `[4, 7]`.
 
