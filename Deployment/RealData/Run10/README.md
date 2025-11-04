@@ -144,3 +144,104 @@ Plot rank or condition number against different inputs to identify fragile zones
 * ❌ If rank < 4 → not invertible in that region
 
 This provides a way to assess whether a neural network's forward function can support a useful inverse mapping.
+
+
+---
+
+## Condition Number
+
+# Jacobian Rank and Condition Number Analysis
+
+This README explains the code used to compute the **Jacobian rank** and **condition number** of a neural network model's input-output mapping using PyTorch. These metrics help determine whether the model is locally invertible and how stable that inversion is.
+
+---
+
+## ⚙️ Code Purpose
+
+The code:
+
+1. Computes the **Jacobian matrix** of the model's output with respect to its input.
+2. Applies **Singular Value Decomposition (SVD)**.
+3. Calculates:
+
+   * The **rank** of the Jacobian (i.e., number of significant directions)
+   * The **condition number**, which indicates how well-conditioned or invertible the system is
+
+---
+
+## 🔎 Line-by-Line Breakdown
+
+```python
+x_point = x_point.detach().clone().requires_grad_(True)  # shape: [7]
+```
+
+* Prepares the input point to allow gradient computation.
+* `detach().clone()` ensures it's not connected to any previous computation graph.
+* `requires_grad_(True)` enables gradient tracking.
+
+```python
+J = jacobian(wrapped_model, x_point)  # shape: [output_dim, input_dim]
+```
+
+* Computes the **Jacobian matrix**:
+  [
+  J_{ij} = \frac{\partial \text{output}_i}{\partial \text{input}_j}
+  ]
+* If output = 4 and input = 7, then `J` has shape `[4, 7]`.
+
+```python
+u, s, v = torch.svd(J)
+```
+
+* Performs **Singular Value Decomposition**:
+  [
+  J = U \cdot \text{diag}(s) \cdot V^T
+  ]
+* `s` contains the singular values, which tell you how much the input space is stretched or squashed.
+
+```python
+rank = (s > 1e-5).sum().item()
+```
+
+* Counts how many singular values are significantly non-zero.
+* This gives the **numerical rank** of the Jacobian.
+
+```python
+if s.min().item() < 1e-12:
+    cond_number = float('inf')
+else:
+    cond_number = s.max().item() / s.min().item()
+```
+
+* Computes the **condition number**:
+  [
+  \kappa(J) = \frac{\sigma_{\text{max}}}{\sigma_{\text{min}}}
+  ]
+* A high condition number (e.g., > 10,000) means the system is **ill-conditioned** and nearly non-invertible.
+* If the smallest singular value is close to zero, it sets the condition number to `inf`.
+
+---
+
+## 📊 Why It Matters
+
+* **Low condition number (e.g., < 100)**: The model is stable and easily invertible.
+* **High condition number (e.g., > 10,000)**: Small changes in output can cause large changes in input.
+* **Infinite condition number**: The system is effectively non-invertible at that point.
+
+This analysis is critical for tasks like **Neural Input Optimization**, **control systems**, and **inverse problems**, where you rely on reversing the model to find inputs that produce desired outputs.
+
+---
+
+
+
+
+
+
+
+---
+
+
+
+
+
+
