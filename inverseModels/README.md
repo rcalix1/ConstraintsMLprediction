@@ -3,6 +3,10 @@
 * NIO
 * Min norm solutions
 
+## Jacobians
+
+* https://github.com/rcalix1/ConstraintsMLprediction/tree/main/Deployment/RealData/Run10
+
 # Minimum-Norm Inverse Solution
 
 This README outlines the use of a **minimum-norm inverse** to solve the inverse problem of a PCA-compressed neural forward model. The objective is to recover **7-dimensional input vectors** that produce desired **4-dimensional outputs**, using the local Jacobian at each test sample.
