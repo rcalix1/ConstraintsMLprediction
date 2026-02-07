@@ -7,66 +7,73 @@
 
 * https://github.com/rcalix1/ConstraintsMLprediction/tree/main/Deployment/RealData/Run10
 
-# Minimum-Norm Inverse Solution
+# 🧮 Minimum-Norm Inverse Solution
 
-This README outlines the use of a **minimum-norm inverse** to solve the inverse problem of a PCA-compressed neural forward model. The objective is to recover **7-dimensional input vectors** that produce desired **4-dimensional outputs**, using the local Jacobian at each test sample.
-
----
-
-## 📦 Problem Setup
-
-* **Original data**: input ( x \in \mathbb{R}^7 ), output ( y \in \mathbb{R}^4 )
-* **PCA**: Compress ( x \to x_{PCA} \in \mathbb{R}^4 )
-* **Model**: Train forward map ( y = f(x_{PCA}) )
-* **Goal**: Given a desired change ( \Delta y ), find a corresponding ( \Delta x ) such that ( f(x + \Delta x) \approx y + \Delta y )
+This README explains how to compute a **minimum-norm input** that causes a desired change in model output using the local Jacobian of a neural forward model. The model maps PCA-compressed input vectors (size 4) to output vectors (size 4), originally derived from a 7D input space.
 
 ---
 
-## 🧠 Minimum-Norm Method
+## 🔧 Problem Setup
 
-### Optimization Objective
+* Original input: `x ∈ ℝ⁷`
+* PCA-compressed input: `x_pca ∈ ℝ⁴`
+* Forward model: `y = f(x_pca)`
+* Objective: For a small change in output `Δy`, find the smallest `Δx` such that:
 
-At each test sample ( t ), solve:
-
-[ \min | x^{(t)} | \quad \text{subject to} \quad G^{(t)} x^{(t)} = p^{(t)} ]
-
-Where ( G = J ) is the Jacobian of the forward model at ( x^{(t)} ), and ( p^{(t)} = y^{(t)} + \Delta y ).
-
-### Solution via Pseudoinverse
-
-The closed-form minimum-norm solution is:
-
-[ \Delta x = J^{\dagger} \Delta y \quad \text{where} \quad J^{\dagger} = (J^T J)^{-1} J^T ]
-
-This selects the unique solution with the smallest ( \ell_2 ) norm among all ( \Delta x ) that satisfy ( J \Delta x = \Delta y ).
+$$
+J \cdot \Delta x = \Delta y
+$$
 
 ---
 
-## 🧪 Example Code Snippet
+## ✅ Solution: Minimum-Norm Input
+
+To solve for `Δx`, we use the **Moore–Penrose pseudoinverse** of the Jacobian `J`:
+
+$$
+\Delta x = J^{\dagger} \cdot \Delta y
+$$
+
+This gives the input change `Δx` with the smallest Euclidean norm (`‖Δx‖`) that still satisfies the desired output change.
+
+* This works **locally**, per test sample.
+* The Jacobian `J` is computed via autograd.
+* After solving in PCA space (4D), the result can be **reversed back to the original 7D** input space.
+
+---
+
+## 🧪 Example Code (Clean)
 
 ```python
 def get_min_norm_delta_x(x_point, delta_y):
     x_point = x_point.detach().clone().requires_grad_(True)
-    J = jacobian(wrapped_model, x_point)
-    J_pinv = torch.linalg.pinv(J)
-    delta_x = J_pinv @ delta_y.view(-1, 1)
+    J = jacobian(wrapped_model, x_point)  # shape: [4, 4] in PCA space
+    delta_x = torch.linalg.pinv(J) @ delta_y.view(-1, 1)
     return delta_x.view(-1)
 ```
 
-This operates in PCA space. To recover full input vector ( x \in \mathbb{R}^7 ), reverse the PCA transform after computing ( \Delta x ).
+---
+
+## 📈 Diagnostic Metrics
+
+For each sample, you may also compute:
+
+* **Rank of J**: to detect singularities
+* **Condition number**: `cond = σ_max / σ_min` from SVD
+* **Error**: `‖f(x + Δx) − (y + Δy)‖`
 
 ---
 
-## 🧩 Interpretation
+## 📌 Interpretation
 
-* The **minimum-norm** refers to the input perturbation ( \Delta x ) having the smallest magnitude needed to achieve ( \Delta y ).
-* Useful when the Jacobian is not square or is ill-conditioned.
-* Diagnostic metrics: **rank**, **condition number**, and **output error**.
+* The **minimum-norm** refers to choosing the input perturbation `Δx` with smallest norm among all possible solutions.
+* It finds a unique solution even when multiple inputs could produce the same output change.
+* Especially helpful when the Jacobian is non-invertible or poorly conditioned.
 
 ---
 
-## ✅ Summary
+## 🧠 Reminder
 
-Use the Jacobian pseudoinverse at each test point to compute local minimum-norm input deltas. This gives a unique, efficient inverse—ideal for linearized models in PCA space.
+This operates in **PCA space**, so after `Δx` is found, use the PCA decoder to recover the full 7D input if needed.
 
 ---
