@@ -3,6 +3,10 @@
 * NIO
 * Min norm solutions
 
+## Questions
+
+* With this min norm solution you need to have an initial x,y, and delta?
+
 ## Jacobians
 
 * https://github.com/rcalix1/ConstraintsMLprediction/tree/main/Deployment/RealData/Run10
