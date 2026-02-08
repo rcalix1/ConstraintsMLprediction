@@ -172,3 +172,9 @@ for x(t)
 
 min || x(t) ||
 
+## Papers
+
+* https://d1wqtxts1xzle7.cloudfront.net/34612234/iksurvey-libre.pdf?1409714427=&response-content-disposition=inline%3B+filename%3DInverse_Kinematics.pdf&Expires=1770521683&Signature=DDFz-WzL40pYo25T2NVFvMuGvGgxMWBWEo3d0C5W8MUDWeAQcUDrVVr-g0~YZifL8FMAa3qZ7pUzO-gB5Mf8dxgm7xu38L3jKQoGKPTqHqRHKzW7WoH-kGm0iIr5~3LztdTQ9aZNu7r~6Tu1Al9gUbcO56YDhtK24tOfyxZke45ommbcBIFmWW0GsWAfvgi~8ftFls0STKaTDM0BeLAYf-bP7bWnCdJ1dymBF6nqCrGldAL7Yzmgg-xji-4yvbSzVki-Dr1zTOhvnfnHHVhPVfnlpbftjhPUufBw4vk8oV0znen8SC0OXiKVwit~Prytkuu0YZvB6hjV46~R6VDVpQ__&Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA
+
+* 
+
