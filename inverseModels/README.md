@@ -152,5 +152,21 @@ def solve_minimum_norm_update(model, x0, target_y):
 * 
 
 
+## Notes
 
+p' = Gx
+
+min || x ||
+
+subjected to:
+
+p Gx
+
+p(t) = G(t) x(t), t =1, 2, 3, ..., 1000
+
+then at each t, we need to solve the above optimization problem 
+
+for x(t)
+
+min || x(t) ||
 
