@@ -154,6 +154,8 @@ def solve_minimum_norm_update(model, x0, target_y):
 
 ## Notes
 
+G is the Jacobian matrix of f(x) evaluated at some point
+
 p' = Gx
 
 min || x ||
