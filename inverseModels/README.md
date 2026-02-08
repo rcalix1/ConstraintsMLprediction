@@ -81,3 +81,76 @@ For each sample, you may also compute:
 This operates in **PCA space**, so after `Δx` is found, use the PCA decoder to recover the full 7D input if needed.
 
 ---
+
+## A code example
+
+```
+
+import torch
+from torch.autograd.functional import jacobian
+
+def solve_minimum_norm_update(model, x0, target_y):
+    """
+    Computes a minimum-norm update step for the input x0 towards the target_y.
+    
+    Args:
+        model (nn.Module): The neural network.
+        x0 (torch.Tensor): Initial guess for the input.
+        target_y (torch.Tensor): The desired output.
+
+    Returns:
+        torch.Tensor: The minimum-norm update to x0 (Delta x).
+    """
+    # Ensure the input requires gradients
+    x = x0.detach().clone().requires_grad_(True)
+    
+    # Define a function to compute the output for use with jacobian()
+    def func(input_x):
+        return model(input_x)
+
+    # Compute the Jacobian matrix at the current input x
+    # 'create_graph=True' is often needed if you want to backpropagate through this process
+    J = jacobian(func, x, create_graph=True, vectorize=True)
+    
+    # Calculate the current residual (difference between desired and actual output)
+    current_y = func(x)
+    delta_y = target_y - current_y
+    
+    # Flatten the Jacobian and residual if necessary (depends on problem dimensions)
+    # This example assumes J is 2D and delta_y is 1D for simplicity
+    if J.dim() > 2:
+        J = J.view(-1, x.numel())
+        delta_y = delta_y.view(-1)
+        
+    # Compute the pseudoinverse of the Jacobian using SVD
+    J_pinv = torch.pinverse(J)
+    
+    # Calculate the minimum norm update: Delta x = J_pinv @ Delta y
+    delta_x = J_pinv @ delta_y
+    
+    # Reshape delta_x to match the original input shape
+    delta_x = delta_x.view_as(x0)
+    
+    return delta_x
+
+# Example usage with a simple model (ensure model is defined)
+# model = MyNeuralNetwork()
+# x0 = torch.randn(1, input_dim)
+# target_y = torch.randn(1, output_dim)
+# delta_x = solve_minimum_norm_update(model, x0, target_y)
+# x_new = x0 + delta_x
+
+
+
+```
+
+
+
+## Neural Input Optimization (NIO)
+
+* https://ieeexplore.ieee.org/abstract/document/11337483
+* 
+
+
+
+
