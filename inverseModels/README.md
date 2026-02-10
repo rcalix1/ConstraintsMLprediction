@@ -403,6 +403,6 @@ Use this as a reference when comparing inverse strategies — whether for tradit
 
 ## Limitations
 
-* https://en.wikipedia.org/wiki/Gauss–Newton_algorithm?utm_source=chatgpt.com
-* 
+
+* https://en.wikipedia.org/wiki/Gauss–Newton_algorithm
 
