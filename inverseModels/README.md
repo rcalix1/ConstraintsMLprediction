@@ -178,3 +178,183 @@ min || x(t) ||
 
 * 
 
+---
+
+
+
+
+# Minimum-Norm Solutions and Neural Input Optimization
+
+This document explores four key techniques for solving inverse problems using minimum-norm solutions, starting from classical linear algebra to nonlinear neural network inversion. Each section includes a conceptual explanation and working code examples.
+
+---
+
+## 1. Analytical Regression (Solving for $w$ in $y = Xw$)
+
+In classical linear regression, we solve for weights $w$ that minimize squared error:
+
+$$
+\min_w |y - Xw|^2
+$$
+
+This gives the closed-form solution:
+
+$$
+w = (X^T X)^{-1} X^T y
+$$
+
+If $X^T X$ is not invertible, we use the Moore–Penrose pseudoinverse:
+
+$$
+w = X^+ y
+$$
+
+### Code Example:
+
+```python
+import numpy as np
+
+X = np.array([[1, 1], [1, 2], [1, 3]])  # 3 samples, 2 features (bias + slope)
+y = np.array([1, 2, 2.5])
+
+w = np.linalg.pinv(X) @ y
+
+print("Weights w:", w)
+print("Predicted y:", X @ w)
+```
+
+---
+
+## 2. Minimum-Norm Inverse (Solving $Ax = y$)
+
+When $A$ is underdetermined (more variables than equations), there are infinite $x$ that solve $Ax = y$. The minimum-norm solution is:
+
+$$
+x = A^+ y
+$$
+
+This minimizes $|x|$ among all valid solutions.
+
+### Code Example:
+
+```python
+A = np.array([[1, 2, 3], [4, 5, 6]])  # Shape (2, 3)
+y = np.array([7, 8])
+
+x_min_norm = np.linalg.pinv(A) @ y
+
+print("Minimum-norm solution x:", x_min_norm)
+print("Norm of x:", np.linalg.norm(x_min_norm))
+```
+
+---
+
+## 3. Neural Input Optimization (NIO)
+
+For a nonlinear function $f(x)$ (e.g., a neural network), we want to find $x$ such that:
+
+$$
+\min_x |f(x) - y|^2 + \lambda |x|^2
+$$
+
+This is the gradient-based analog of the minimum-norm inverse.
+
+### Code Example (PyTorch):
+
+```python
+import torch
+import torch.nn as nn
+import torch.optim as optim
+
+class TinyNet(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(3, 5),
+            nn.ReLU(),
+            nn.Linear(5, 2)
+        )
+    def forward(self, x):
+        return self.net(x)
+
+model = TinyNet()
+for param in model.parameters():
+    param.requires_grad = False
+
+y_target = torch.tensor([1.0, 2.0])
+x = torch.randn(3, requires_grad=True)
+optimizer = optim.Adam([x], lr=0.01)
+
+for step in range(300):
+    optimizer.zero_grad()
+    y_pred = model(x)
+    loss = ((y_pred - y_target)**2).sum() + 0.01 * (x**2).sum()
+    loss.backward()
+    optimizer.step()
+
+print("Recovered input x:", x.data)
+print("Output f(x):", model(x).data)
+```
+
+---
+
+## 4. Jacobian-Based Linear Inversion
+
+We linearize $f(x)$ around $x_0$:
+
+$$
+f(x) \approx f(x_0) + J(x_0)(x - x_0)
+$$
+
+Solve the linear system:
+
+$$
+x = x_0 + J^+(y - f(x_0))
+$$
+
+### Code Example (Jacobian via Autograd):
+
+```python
+import torch
+import numpy as np
+
+model = nn.Sequential(
+    nn.Linear(3, 5),
+    nn.Tanh(),
+    nn.Linear(5, 2)
+)
+for p in model.parameters():
+    p.requires_grad = False
+
+y_target = torch.tensor([1.0, 2.0])
+x0 = torch.randn(3, requires_grad=True)
+y0 = model(x0)
+
+def compute_jacobian(fx, x):
+    return torch.autograd.functional.jacobian(lambda x_: model(x_), x)
+
+J = compute_jacobian(y0, x0)  # Shape [2, 3]
+residual = y_target - y0.detach()
+
+J_np = J.detach().numpy()
+residual_np = residual.numpy()
+dx = torch.tensor(np.linalg.pinv(J_np) @ residual_np)
+
+x_new = x0.detach() + dx
+print("Updated x:", x_new)
+print("New f(x):", model(x_new))
+```
+
+---
+
+## Summary Table
+
+|  # | Technique                 | Solve For | Model Type   | Solution Style    |
+| -: | ------------------------- | --------- | ------------ | ----------------- |
+|  1 | Analytical Regression     | $w$       | Linear       | Closed-form       |
+|  2 | Minimum-Norm Inverse      | $x$       | Linear       | Pseudoinverse     |
+|  3 | Neural Input Optimization | $x$       | Nonlinear NN | Iterative (grad)  |
+|  4 | Jacobian Linearization    | $x$       | Nonlinear NN | Local linear step |
+
+Use this as a reference when comparing inverse strategies — whether for traditional systems or modern deep learning models.
+
