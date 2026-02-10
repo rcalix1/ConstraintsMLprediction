@@ -309,10 +309,11 @@ $$
 Where:
 
 * $f(x)$ is a vector-valued function (e.g., neural net output)
-* $J(x_0)$ is the **Jacobian matrix** of shape $[\text{output_dim}, \text{input_dim}]$, containing all partial derivatives:
-  $$
-  J_{ij} = \frac{\partial f_i}{\partial x_j}
-  $$
+* $J(x_0)$ is the **Jacobian matrix** of shape ([\text{output_dim},\ \text{input_dim}]), containing all partial derivatives:
+
+$$
+J_{ij} = \frac{\partial f_i}{\partial x_j}
+$$
 
 To solve for an update that moves the output closer to a target $y$, we compute:
 
@@ -348,7 +349,7 @@ y0 = model(x0)
 def compute_jacobian(fx, x):
     """
     Returns Jacobian J where J[i, j] = ∂f_i / ∂x_j
-    Assumes:
+    Assumes: 
       - fx is the output tensor f(x), shape [m]
       - x is the input tensor, shape [n]
     Returns:
@@ -370,6 +371,14 @@ x_new = x0.detach() + dx
 print("Updated x:", x_new)
 print("New f(x):", model(x_new))
 ```
+
+---
+
+### ✅ Notes:
+
+* `torch.autograd.functional.jacobian()` is recommended for full Jacobians.
+* Assumes a single input vector (not batched). For batched inputs, use `vmap` or loop.
+* For better numerical stability, cast tensors and model to `.double()`.
 
 ---
 
