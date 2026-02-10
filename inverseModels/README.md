@@ -300,24 +300,38 @@ print("Output f(x):", model(x).data)
 
 ## 4. Jacobian-Based Linear Inversion
 
-We linearize $f(x)$ around $x_0$:
+We linearize the neural network $f(x)$ near a point $x_0$ using a first-order Taylor approximation:
 
 $$
 f(x) \approx f(x_0) + J(x_0)(x - x_0)
 $$
 
-Solve the linear system:
+Where:
+
+* $f(x)$ is a vector-valued function (e.g., neural net output)
+* $J(x_0)$ is the **Jacobian matrix** of shape $[\text{output_dim}, \text{input_dim}]$, containing all partial derivatives:
+  $$
+  J_{ij} = \frac{\partial f_i}{\partial x_j}
+  $$
+
+To solve for an update that moves the output closer to a target $y$, we compute:
 
 $$
-x = x_0 + J^+(y - f(x_0))
+x = x_0 + J(x_0)^+ (y - f(x_0))
 $$
 
-### Code Example (Jacobian via Autograd):
+This is a **minimum-norm correction** to $x_0$ based on the local linear approximation of the network.
+
+---
+
+### ✅ Code Example: Compute Jacobian Using Autograd
 
 ```python
 import torch
+import torch.nn as nn
 import numpy as np
 
+# Define model: f: R^3 → R^2
 model = nn.Sequential(
     nn.Linear(3, 5),
     nn.Tanh(),
@@ -330,20 +344,40 @@ y_target = torch.tensor([1.0, 2.0])
 x0 = torch.randn(3, requires_grad=True)
 y0 = model(x0)
 
+# --- Compute full Jacobian J(x0) ---
 def compute_jacobian(fx, x):
+    """
+    Returns Jacobian J where J[i, j] = ∂f_i / ∂x_j
+    Assumes:
+      - fx is the output tensor f(x), shape [m]
+      - x is the input tensor, shape [n]
+    Returns:
+      - J: shape [m, n]
+    """
     return torch.autograd.functional.jacobian(lambda x_: model(x_), x)
 
 J = compute_jacobian(y0, x0)  # Shape [2, 3]
-residual = y_target - y0.detach()
 
+# --- Solve for minimum-norm input correction ---
+residual = y_target - y0.detach()
 J_np = J.detach().numpy()
 residual_np = residual.numpy()
+
 dx = torch.tensor(np.linalg.pinv(J_np) @ residual_np)
 
+# --- Update x ---
 x_new = x0.detach() + dx
 print("Updated x:", x_new)
 print("New f(x):", model(x_new))
 ```
+
+---
+
+### ✅ Notes:
+
+* `torch.autograd.functional.jacobian()` is recommended for full Jacobians.
+* Assumes a single input vector (not batched). For batched inputs, use `vmap` or loop.
+* For better numerical stability, cast tensors and model to `.double()`.
 
 ---
 
