@@ -399,3 +399,10 @@ print("New f(x):", model(x_new))
 
 Use this as a reference when comparing inverse strategies — whether for traditional systems or modern deep learning models.
 
+---
+
+## Limitations
+
+* https://en.wikipedia.org/wiki/Gauss–Newton_algorithm?utm_source=chatgpt.com
+* 
+
