@@ -3,6 +3,10 @@
 * NIO
 * Min norm solutions
 
+## Runs
+
+* Runs: 11, 12, 13
+
 ## Questions
 
 * With this min norm solution you need to have an initial x,y, and delta?
