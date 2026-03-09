@@ -1088,3 +1088,510 @@ where
 
 This is the analytical form used in many optimization solvers.
 
+---
+
+## Derivation 3
+
+
+# Jacobian Minimum-Norm Inverse with Economic Cost (Full Derivation with SVD)
+
+This derivation shows the full chain used in the solver:
+
+forward model
+→ Jacobian linearization
+→ minimum-norm inverse solution
+→ add economic cost term
+→ express final solver in SVD form
+
+---
+
+# 1. Forward Model
+
+Assume a nonlinear forward model
+
+$$
+p = f(x)
+$$
+
+where
+
+* (x) = input variables
+* (p) = output variables
+
+Our goal is the **inverse problem**:
+
+Find inputs (x) that produce a desired output (p_{target}).
+
+---
+
+# 2. Linearized Inverse Problem
+
+Linearize the system around the current operating point (x_0).
+
+Using a first-order Taylor expansion:
+
+$$
+p \approx f(x_0) + J(x - x_0)
+$$
+
+where
+
+$$
+J = \frac{\partial f}{\partial x}
+$$
+
+is the **Jacobian matrix**.
+
+---
+
+Define
+
+$$
+\Delta p = p_{target} - f(x_0)
+$$
+
+and
+
+$$
+\Delta x = x - x_0
+$$
+
+Substituting gives the **linearized inverse system**
+
+$$
+\Delta p = J \Delta x
+$$
+
+where
+
+* (J) = Jacobian
+* (\Delta x) = input adjustment
+* (\Delta p) = required output change
+
+---
+
+# 3. Underdetermined System
+
+Typically the system has more inputs than outputs.
+
+Example:
+
+inputs = 7
+outputs = 4
+
+Thus
+
+$$
+J \in \mathbb{R}^{4 \times 7}
+$$
+
+The equation
+
+$$
+J\Delta x = \Delta p
+$$
+
+has **infinitely many solutions**.
+
+---
+
+# 4. Minimum-Norm Solution
+
+To select one solution we choose the **smallest input adjustment**.
+
+$$
+\Delta x =
+\arg\min ||\Delta x||^2
+$$
+
+subject to
+
+$$
+J\Delta x = \Delta p
+$$
+
+---
+
+# 5. Solve Using Lagrange Multipliers
+
+Construct the Lagrangian
+
+$$
+L(\Delta x,\lambda) =
+\Delta x^T\Delta x +
+\lambda^T(J\Delta x - \Delta p)
+$$
+
+Derivative with respect to (\Delta x)
+
+$$
+\frac{\partial L}{\partial \Delta x}
+====================================
+
+2\Delta x + J^T\lambda
+$$
+
+Set derivative to zero
+
+$$
+2\Delta x + J^T\lambda = 0
+$$
+
+Solve for (\Delta x)
+
+$$
+\Delta x = -\frac{1}{2}J^T\lambda
+$$
+
+---
+
+# 6. Substitute into Constraint
+
+Constraint
+
+$$
+J\Delta x = \Delta p
+$$
+
+Substitute
+
+$$
+J\left(-\frac{1}{2}J^T\lambda\right) = \Delta p
+$$
+
+$$
+-\frac{1}{2}JJ^T\lambda = \Delta p
+$$
+
+Solve
+
+$$
+\lambda = -2(JJ^T)^{-1}\Delta p
+$$
+
+---
+
+# 7. Minimum-Norm Solution
+
+Substitute back
+
+$$
+\Delta x =
+J^T(JJ^T)^{-1}\Delta p
+$$
+
+This expression is the **Moore-Penrose pseudoinverse**
+
+$$
+J^+ = J^T(JJ^T)^{-1}
+$$
+
+so
+
+$$
+\Delta x = J^+ \Delta p
+$$
+
+---
+
+# 8. Introduce Economic Cost
+
+Each input has a cost.
+
+Define the **price vector**
+
+$$
+c
+$$
+
+Example
+
+$$
+c =
+[price_{H2},\ price_{PCI},\ price_{NGI},\ ...]
+$$
+
+Total cost of a change
+
+$$
+Cost = c^T \Delta x
+$$
+
+Instead of minimizing only the input magnitude we add the cost penalty.
+
+---
+
+# 9. New Optimization Objective
+
+$$
+\min
+\left(
+||J\Delta x - \Delta p||^2
++
+\lambda c^T \Delta x
+\right)
+$$
+
+---
+
+# 10. Expand the Objective
+
+$$
+L(\Delta x) =
+(J\Delta x - \Delta p)^T(J\Delta x - \Delta p)
++
+\lambda c^T\Delta x
+$$
+
+Expanding
+
+$$
+L(\Delta x)
+===========
+
+## \Delta x^T J^T J \Delta x
+
+2 \Delta p^T J \Delta x
++
+\Delta p^T\Delta p
++
+\lambda c^T\Delta x
+$$
+
+---
+
+# 11. Take Derivative
+
+$$
+\frac{\partial L}{\partial \Delta x}
+====================================
+
+## 2J^TJ\Delta x
+
+2J^T\Delta p
++
+\lambda c
+$$
+
+Set to zero
+
+$$
+2J^TJ\Delta x - 2J^T\Delta p + \lambda c = 0
+$$
+
+Divide by 2
+
+$$
+J^TJ\Delta x =
+J^T\Delta p - \frac{\lambda}{2}c
+$$
+
+---
+
+# 12. Solve the System
+
+$$
+\Delta x =
+(J^TJ)^{-1}
+\left(
+J^T\Delta p - \frac{\lambda}{2}c
+\right)
+$$
+
+---
+
+# 13. Express Solver Using SVD
+
+Compute the singular value decomposition of the Jacobian
+
+$$
+J = U\Sigma V^T
+$$
+
+where
+
+* (U) orthogonal
+* (V) orthogonal
+* (\Sigma) diagonal singular values
+
+---
+
+## Compute (J^T J)
+
+$$
+J^T J =
+(U\Sigma V^T)^T (U\Sigma V^T)
+$$
+
+$$
+(U\Sigma V^T)^T = V\Sigma^T U^T
+$$
+
+Substitute
+
+$$
+J^T J =
+(V\Sigma^T U^T)(U\Sigma V^T)
+$$
+
+Since
+
+$$
+U^T U = I
+$$
+
+we obtain
+
+$$
+J^T J = V \Sigma^T \Sigma V^T
+$$
+
+---
+
+## Invert
+
+$$
+(J^T J)^{-1}
+============
+
+V (\Sigma^T \Sigma)^{-1} V^T
+$$
+
+---
+
+# 14. Substitute into the Solver
+
+$$
+\Delta x =
+V (\Sigma^T \Sigma)^{-1} V^T
+\left(
+J^T \Delta p
+------------
+
+\frac{\lambda}{2} c
+\right)
+$$
+
+---
+
+## Replace (J^T)
+
+From
+
+$$
+J = U\Sigma V^T
+$$
+
+we obtain
+
+$$
+J^T = V\Sigma^T U^T
+$$
+
+Substitute
+
+$$
+\Delta x =
+V (\Sigma^T \Sigma)^{-1} V^T
+\left(
+V\Sigma^T U^T \Delta p
+----------------------
+
+\frac{\lambda}{2} c
+\right)
+$$
+
+---
+
+# 7.7 Final SVD-Based Update Equation
+
+$$
+\Delta x =
+V (\Sigma^T \Sigma)^{-1} \Sigma^T U^T \Delta p
+----------------------------------------------
+
+\frac{\lambda}{2}
+V (\Sigma^T \Sigma)^{-1} V^T c
+$$
+
+---
+
+# 7.8 Interpretation
+
+The update consists of two parts.
+
+### Output correction
+
+$$
+V (\Sigma^T \Sigma)^{-1} \Sigma^T U^T \Delta p
+$$
+
+which is equivalent to
+
+$$
+J^+ \Delta p
+$$
+
+---
+
+### Economic cost correction
+
+$$
+-\frac{\lambda}{2}
+V (\Sigma^T \Sigma)^{-1} V^T c
+$$
+
+This biases the solution toward **cheaper inputs**.
+
+---
+
+# 7.9 Relation to the Implementation
+
+Your solver computes the same step numerically.
+
+```
+rhs = J.T @ delta_y - lambda_cost * price
+delta_x = torch.linalg.solve(J.T @ J, rhs)
+```
+
+because
+
+$$
+(J^T J)^{-1} J^T
+$$
+
+is mathematically equivalent to the **pseudoinverse computed from SVD**.
+
+---
+
+# Final Conceptual Flow
+
+forward model
+
+↓
+
+Jacobian linearization
+
+↓
+
+minimum-norm inverse
+
+↓
+
+add cost term
+
+↓
+
+solve system
+
+↓
+
+express solver in SVD form
+
+
+
+
+
+
+---
+
