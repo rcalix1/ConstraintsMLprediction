@@ -614,6 +614,473 @@ Derived from explicit optimization.
 
 Both methods attempt to find cheaper operating points while maintaining the desired furnace outputs.
 
+---
 
+## Derivation 2
 
+# Linear Least Squares, Minimum Norm, and Cost-Regularized Minimum Norm
+
+This document derives three related solutions:
+
+1. Standard Least Squares
+2. Minimum Norm Solution
+3. Minimum Norm with a Cost (Price) Term
+
+---
+
+# 1. Standard Least Squares Derivation
+
+Assume a linear model
+
+$$
+y = Xw
+$$
+
+where
+
+- $X \in \mathbb{R}^{n \times d}$ (data matrix)
+- $w \in \mathbb{R}^{d}$ (parameters)
+- $y \in \mathbb{R}^{n}$ (observations)
+
+The training objective is
+
+$$
+w^* = \arg\min_w ||Xw - y||^2
+$$
+
+---
+
+## Expand the loss
+
+$$
+L(w) = ||Xw - y||^2
+$$
+
+Write the squared norm explicitly:
+
+$$
+L(w) = (Xw - y)^T (Xw - y)
+$$
+
+Expand the multiplication:
+
+$$
+L(w) =
+w^T X^T X w
+- 2y^T X w
++ y^T y
+$$
+
+---
+
+## Take derivative with respect to $w$
+
+$$
+\frac{\partial L}{\partial w}
+=
+2X^TXw - 2X^Ty
+$$
+
+Set derivative to zero:
+
+$$
+2X^TXw - 2X^Ty = 0
+$$
+
+Divide by 2:
+
+$$
+X^TXw = X^Ty
+$$
+
+---
+
+## Solve for $w$
+
+$$
+w = (X^TX)^{-1} X^T y
+$$
+
+This is the **standard least squares solution**.
+
+---
+
+# 2. Deriving the Same Solution Using SVD
+
+Take the Singular Value Decomposition of $X$:
+
+$$
+X = U\Sigma V^T
+$$
+
+where
+
+- $U$ orthogonal
+- $\Sigma$ diagonal singular values
+- $V$ orthogonal
+
+---
+
+## Compute $X^TX$
+
+Substitute the SVD:
+
+$$
+X^TX = (U\Sigma V^T)^T (U\Sigma V^T)
+$$
+
+Compute the transpose:
+
+$$
+(U\Sigma V^T)^T = V\Sigma^T U^T
+$$
+
+Substitute:
+
+$$
+X^TX =
+(V\Sigma^T U^T)(U\Sigma V^T)
+$$
+
+Use orthogonality of $U$
+
+$$
+U^TU = I
+$$
+
+So
+
+$$
+X^TX =
+V\Sigma^T \Sigma V^T
+$$
+
+---
+
+## Invert $X^TX$
+
+$$
+(X^TX)^{-1}
+=
+(V\Sigma^T\Sigma V^T)^{-1}
+$$
+
+Because $V$ is orthogonal:
+
+$$
+(V\Sigma^T\Sigma V^T)^{-1}
+=
+V (\Sigma^T\Sigma)^{-1} V^T
+$$
+
+---
+
+## Substitute back into the least squares solution
+
+Original solution:
+
+$$
+w = (X^TX)^{-1} X^T y
+$$
+
+Substitute the expressions:
+
+$$
+w =
+\left[V (\Sigma^T\Sigma)^{-1} V^T\right]
+\left[(U\Sigma V^T)^T\right] y
+$$
+
+Compute the transpose again:
+
+$$
+(U\Sigma V^T)^T = V\Sigma^T U^T
+$$
+
+Substitute:
+
+$$
+w =
+V (\Sigma^T\Sigma)^{-1} V^T
+V \Sigma^T U^T y
+$$
+
+Since
+
+$$
+V^T V = I
+$$
+
+we obtain
+
+$$
+w =
+V (\Sigma^T\Sigma)^{-1} \Sigma^T U^T y
+$$
+
+Because
+
+$$
+(\Sigma^T\Sigma)^{-1}\Sigma^T = \Sigma^{-1}
+$$
+
+the solution simplifies to
+
+$$
+w = V \Sigma^{-1} U^T y
+$$
+
+This is the **SVD least squares solution**.
+
+---
+
+# 3. Minimum Norm Solution
+
+Now consider a different problem.
+
+We want to find $x$ such that
+
+$$
+Gx = p
+$$
+
+but the system may be underdetermined.
+
+We choose the solution with **minimum norm**
+
+$$
+x^* = \arg\min_x ||x||^2
+$$
+
+subject to
+
+$$
+Gx = p
+$$
+
+---
+
+## Construct the Lagrangian
+
+$$
+L(x,\lambda) = x^Tx + \lambda^T(Gx - p)
+$$
+
+---
+
+## Derivative with respect to $x$
+
+$$
+\frac{\partial L}{\partial x}
+=
+2x + G^T\lambda
+$$
+
+Set to zero:
+
+$$
+2x + G^T\lambda = 0
+$$
+
+Solve for $x$:
+
+$$
+x = -\frac{1}{2}G^T\lambda
+$$
+
+---
+
+## Substitute into constraint
+
+Constraint:
+
+$$
+Gx = p
+$$
+
+Substitute $x$:
+
+$$
+G\left(-\frac{1}{2}G^T\lambda\right) = p
+$$
+
+$$
+-\frac{1}{2}GG^T\lambda = p
+$$
+
+Multiply both sides by $-2$:
+
+$$
+GG^T\lambda = -2p
+$$
+
+Solve:
+
+$$
+\lambda = -2(GG^T)^{-1}p
+$$
+
+---
+
+## Substitute back to obtain $x$
+
+$$
+x =
+-\frac{1}{2}G^T
+\left[-2(GG^T)^{-1}p\right]
+$$
+
+Simplify:
+
+$$
+x = G^T(GG^T)^{-1}p
+$$
+
+This is the **minimum norm solution**.
+
+---
+
+# 4. SVD Form of Minimum Norm
+
+Take the SVD of $G$
+
+$$
+G = U\Sigma V^T
+$$
+
+The pseudoinverse is
+
+$$
+G^+ = V\Sigma^+U^T
+$$
+
+Thus
+
+$$
+x = G^+ p
+$$
+
+or
+
+$$
+x = V\Sigma^+U^Tp
+$$
+
+---
+
+# 5. Minimum Norm with a Price / Cost Term
+
+Suppose each variable has a price vector
+
+$$
+c
+$$
+
+Total cost:
+
+$$
+Cost(x) = c^T x
+$$
+
+Define a new optimization objective
+
+$$
+x^* =
+\arg\min_x
+\left(
+||Gx - p||^2
++
+\lambda c^T x
+\right)
+$$
+
+---
+
+## Expand the objective
+
+$$
+L(x)
+=
+(Gx - p)^T(Gx - p)
++
+\lambda c^Tx
+$$
+
+Expand:
+
+$$
+L(x)
+=
+x^TG^TGx
+-
+2p^TGx
++
+p^Tp
++
+\lambda c^Tx
+$$
+
+---
+
+## Take derivative
+
+$$
+\frac{\partial L}{\partial x}
+=
+2G^TGx
+-
+2G^Tp
++
+\lambda c
+$$
+
+Set to zero:
+
+$$
+2G^TGx - 2G^Tp + \lambda c = 0
+$$
+
+Divide by 2:
+
+$$
+G^TGx = G^Tp - \frac{\lambda}{2}c
+$$
+
+---
+
+## Solve for $x$
+
+$$
+x =
+(G^TG)^{-1}
+\left(
+G^Tp
+-
+\frac{\lambda}{2}c
+\right)
+$$
+
+---
+
+# 6. Relation to Practical Solvers
+
+In iterative optimization using a Jacobian $J$
+
+$$
+\Delta x =
+(J^TJ)^{-1}
+\left(
+J^T \Delta y
+-
+\lambda c
+\right)
+$$
+
+where
+
+- $J$ is the Jacobian
+- $\Delta y$ is desired output change
+- $c$ is the price vector
+
+This is the analytical form used in many optimization solvers.
 
