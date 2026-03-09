@@ -5,7 +5,9 @@
 
 ## Runs
 
-* Runs: 11, 12, 13
+* Runs: 11 - works best, heuristic one
+* Runs: 12 - derived SVD with objective of minimizing cost and min norm solution, works second best?
+* Runs: 13 - not working too well 
 
 ## Questions
 
