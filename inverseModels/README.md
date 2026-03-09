@@ -410,3 +410,208 @@ Use this as a reference when comparing inverse strategies — whether for tradit
 
 * https://en.wikipedia.org/wiki/Gauss–Newton_algorithm
 
+
+## Derivation
+
+
+# Cost‑Aware Minimum Norm Inverse Solution
+
+This document derives two methods used in the code for adjusting the input vector `x` so that the model output approaches a target `y` while also incorporating a fuel cost objective.
+
+The forward model is
+
+f(x) = y
+
+Around the current point x we linearize the model using the Jacobian:
+
+f(x + Δx) ≈ f(x) + J Δx
+
+Let
+
+Δy = y_target − f(x)
+
+The classical inverse problem becomes
+
+J Δx ≈ Δy
+
+---
+
+# 1. Classical Minimum‑Norm Solution
+
+We solve
+
+min ||J Δx − Δy||²
+
+The least‑squares solution satisfies
+
+JᵀJ Δx = Jᵀ Δy
+
+If J is not square we use the Moore‑Penrose pseudoinverse
+
+Δx = J⁺ Δy
+
+Using SVD
+
+J = U Σ Vᵀ
+
+Then
+
+J⁺ = V Σ⁺ Uᵀ
+
+where
+
+Σ⁺ = diag(1/σ_i)
+
+Therefore
+
+Δx = V Σ⁺ Uᵀ Δy
+
+This is the classical minimum‑norm inverse solution.
+
+---
+
+# 2. Introducing a Cost Objective
+
+Assume fuel cost
+
+C(x) = pᵀ x
+
+where
+
+p = [price_H2, price_PCI, price_NGI, ...]
+
+We want outputs to match the target while also reducing cost.
+
+Define the optimization problem
+
+min  ||J Δx − Δy||²  +  λ pᵀ Δx
+
+λ controls the cost influence.
+
+---
+
+# 3. Derivation of the Cost‑Aware Solution
+
+Objective
+
+L(Δx) = (JΔx − Δy)ᵀ (JΔx − Δy) + λ pᵀ Δx
+
+Expand the first term
+
+(JΔx − Δy)ᵀ (JΔx − Δy)
+= Δxᵀ JᵀJ Δx − 2 Δyᵀ J Δx + Δyᵀ Δy
+
+Ignoring the constant term
+
+L(Δx) = Δxᵀ JᵀJ Δx − 2 Δyᵀ J Δx + λ pᵀ Δx
+
+Take derivative with respect to Δx
+
+∂L/∂Δx = 2 JᵀJ Δx − 2 Jᵀ Δy + λ p
+
+Set derivative to zero
+
+2 JᵀJ Δx − 2 Jᵀ Δy + λ p = 0
+
+Divide by 2
+
+JᵀJ Δx = Jᵀ Δy − (λ/2) p
+
+Absorbing the constant into λ
+
+JᵀJ Δx = Jᵀ Δy − λ p
+
+Therefore
+
+Δx = (JᵀJ)⁻¹ (Jᵀ Δy − λ p)
+
+This corresponds to the implementation
+
+rhs = J.T @ delta_y − lambda_cost * price_latent
+Δx = (JᵀJ)⁻¹ rhs
+
+If JᵀJ is singular we use SVD.
+
+---
+
+# 4. SVD Form of the Cost‑Aware Solution
+
+Given
+
+J = U Σ Vᵀ
+
+Then
+
+JᵀJ = V Σ² Vᵀ
+
+So
+
+(JᵀJ)⁻¹ = V Σ⁻² Vᵀ
+
+Therefore
+
+Δx = V Σ⁻² Vᵀ (Jᵀ Δy − λ p)
+
+This is the analytical form using SVD.
+
+---
+
+# 5. Method A (Heuristic Cost Nudging)
+
+Code
+
+Δx = (J⁺ Δy) − λ p
+
+Interpretation
+
+Step 1: compute minimum‑norm correction
+
+Δx₁ = J⁺ Δy
+
+Step 2: bias solution toward cheaper fuels
+
+Δx = Δx₁ − λ p
+
+This is not the exact solution of a formal optimization but works as a practical control heuristic.
+
+---
+
+# 6. Method B (Derived Optimization Solution)
+
+Derived from
+
+min ||JΔx − Δy||² + λ pᵀ Δx
+
+Normal equation
+
+JᵀJ Δx = Jᵀ Δy − λ p
+
+Implementation
+
+rhs = J.T @ delta_y − lambda_cost * price_latent
+
+Δx = solve(JᵀJ , rhs)
+
+This method solves the linearized cost‑aware inverse problem.
+
+---
+
+# 7. Summary
+
+Method A
+
+Δx = J⁺ Δy − λ p
+
+Heuristic cost bias.
+
+Method B
+
+Δx = (JᵀJ)⁻¹ (Jᵀ Δy − λ p)
+
+Derived from explicit optimization.
+
+Both methods attempt to find cheaper operating points while maintaining the desired furnace outputs.
+
+
+
+
