@@ -638,9 +638,17 @@ $$
 
 where
 
-- $X \in \mathbb{R}^{n \times d}$ (data matrix)
-- $w \in \mathbb{R}^{d}$ (parameters)
-- $y \in \mathbb{R}^{n}$ (observations)
+$X \in \mathbb{R}^{n \times d}$ 
+
+(data matrix)
+
+$w \in \mathbb{R}^{d}$ 
+
+(parameters)
+
+$y \in \mathbb{R}^{n}$ 
+
+(observations)
 
 The training objective is
 
@@ -673,12 +681,14 @@ $$
 
 ---
 
-## Take derivative with respect to $w$
+## Take derivative with respect to 
+
+$w$
+
+like
 
 $$
-\frac{\partial L}{\partial w}
-=
-2X^TXw - 2X^Ty
+\frac{\partial L}{\partial w} = 2X^TXw - 2X^Ty
 $$
 
 Set derivative to zero:
@@ -695,7 +705,9 @@ $$
 
 ---
 
-## Solve for $w$
+## Solve for 
+
+$w$
 
 $$
 w = (X^TX)^{-1} X^T y
@@ -715,13 +727,17 @@ $$
 
 where
 
-- $U$ orthogonal
-- $\Sigma$ diagonal singular values
-- $V$ orthogonal
+$U$ orthogonal
+
+$\Sigma$ diagonal singular values
+
+$V$ orthogonal
 
 ---
 
-## Compute $X^TX$
+## Compute 
+
+$X^TX$
 
 Substitute the SVD:
 
@@ -757,20 +773,24 @@ $$
 
 ---
 
-## Invert $X^TX$
+## Invert 
+
+$X^TX$
+
+like 
 
 $$
-(X^TX)^{-1}
-=
-(V\Sigma^T\Sigma V^T)^{-1}
+(X^TX)^{-1} = (V\Sigma^T\Sigma V^T)^{-1}
 $$
 
-Because $V$ is orthogonal:
+Because 
+
+$V$ 
+
+is orthogonal:
 
 $$
-(V\Sigma^T\Sigma V^T)^{-1}
-=
-V (\Sigma^T\Sigma)^{-1} V^T
+(V\Sigma^T\Sigma V^T)^{-1} = V (\Sigma^T\Sigma)^{-1} V^T
 $$
 
 ---
@@ -868,13 +888,13 @@ $$
 
 ---
 
-## Derivative with respect to $x$
+## Derivative with respect to 
 
-$$
-\frac{\partial L}{\partial x}
-=
-2x + G^T\lambda
-$$
+$x$
+
+like 
+
+$$ \frac{\partial L}{\partial x} = 2x + G^T\lambda $$
 
 Set to zero:
 
@@ -998,27 +1018,11 @@ $$
 
 ## Expand the objective
 
-$$
-L(x)
-=
-(Gx - p)^T(Gx - p)
-+
-\lambda c^Tx
-$$
+$$ L(x) = (Gx - p)^T(Gx - p) + \lambda c^Tx $$
 
 Expand:
 
-$$
-L(x)
-=
-x^TG^TGx
--
-2p^TGx
-+
-p^Tp
-+
-\lambda c^Tx
-$$
+$$ L(x) = x^TG^TGx - 2p^TGx + p^Tp + \lambda c^Tx $$
 
 ---
 
