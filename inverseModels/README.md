@@ -7,7 +7,8 @@
 
 * Runs: 11 - works best, heuristic one
 * Runs: 12 - derived SVD with objective of minimizing cost and min norm solution, works second best?
-* Runs: 13 - not working too well 
+* Runs: 13 - not working too well
+* Runs: 20 - coke rate added to make y of size 5, now also pred y from x to compare Ys 
 
 ## Questions
 
